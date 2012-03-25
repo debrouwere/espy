@@ -7,16 +7,12 @@
     "dependencies": {
         "coffee-script": "1.x", 
         "async": "0.1.x",
-        "jade": "0.17.x", 
-        "stylus": "0.18.x",
         "yaml": "0.2.x",
-        "haml": "0.4.x",
-        "less": "1.x",
-        "underscore": "1.x",
-        "plate": "0.x"
+        "underscore": "1.x"
     },
     "devDependencies": {
-        "mocha": "0.14.x"
+        "mocha": "0.14.x",
+        "should": "0.6.x"
     },
     "repository": {
         "type": "git", 

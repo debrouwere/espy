@@ -53,6 +53,8 @@ Data is read from YAML, JSON, CSV and XML files in a `data` directory underneath
 
 Context from `/data/test.json` will be available under `data.test`. If multiple data files are named "test" (e.g. `test.json` and `test.yml` then Tilt will merge the resulting context hashes, and resolve conflicting keys (for example if you specify a title in both the JSON and the YAML file) by picking the value from the last updated (newest) file.
 
+Please note that Espy doesn't do a full recursive merge. If you define `title` in one context file and `body` in another, those will be merged. But if you define `author.name` in one context file and `author.email` in another, you'll end up with just one of both values in the resulting context object.
+
 ### Shortcuts
 
 While all context from a data directory is available under the `data` key, the context hash will also contain some shortcuts to data that's (likely to be) specific to a template or page. So if you're rendering index.haml, the `title` context value from an index.json file will be available under `data.index.title` but will also be expanded into the main namespace as just `title`.
@@ -70,6 +72,8 @@ Lastly, the context finder expands on Middleman's conventions through context se
     }
 
 This is useful as a basic building block for applications that need to render the same template many times with different data, for example blogposts that all use the same template or a design prototype that you want to have a couple of variations of.
+
+Note that, if you have an individual context file, e.g. `data/design.json`, in addition to context sets in `data/design`, the individual context file's data will override data in the `data/design/design.json` set. For your own sanity, don't use context sets and individual context files together for a single template.
 
 ### Using YAML files
 
