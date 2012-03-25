@@ -6,10 +6,10 @@ Espy is a context finder for templates. Context finders pass values to your temp
 
 Context finding is useful for two particular use-cases: 
 
-* static site generation: all pages or blogposts, metadata and configuration reside in flat files, and you want to render that information to pages using your favorite template language
-* prototyping: you eventually want to hook up your front-end prototype to a proper back-end, but just to get started it'd be useful to pass on some dummy data to your templates without having to run a database or create a project in Rails, Django, Express or what-have-you
+* **static site generation**: all pages or blogposts, metadata and configuration reside in flat files, and you want to render that information to pages using your favorite template language
+* **prototyping**: you eventually want to hook up your front-end prototype to a proper back-end, but just to get started it'd be useful to pass on some dummy data to your templates without having to run a database or create a project in Rails, Django, Express or what-have-you
 
-For example, the [Jekyll](https://github.com/mojombo/jekyll) blog engine will automatically make all your blog posts and other metadata available to your templates under `page`, `post` and `content`. And Middleman, a static site generator, looks for YAML data in a `/data` subdirectory and passes that on to templates.
+For example, the [Jekyll](https://github.com/mojombo/jekyll) blog engine will automatically make all your blog posts and other metadata available to your blog its templates under `page`, `post` and `content`. And [Middleman](http://middlemanapp.com), a static site generator, looks for YAML data in a `/data` subdirectory and passes that on to templates.
 
 Espy helps you implement similar functionality in your own applications. Here's an example, using [Tilt.js](https://github.com/stdbrouw/tilt.js) to render the templates: 
 
@@ -43,7 +43,7 @@ Install with `npm install espy`.
 
 ## Conventions (mostly implemented)
 
-By default, Tilt.js its context finder works with conventions that are very similar to those [Middleman](http://middlemanapp.com/guides/local-yaml-data) uses for local YAML data, with a couple of added features.
+By default, Tilt.js its context finder works with conventions that extend but are very similar to those [Middleman](http://middlemanapp.com/guides/local-yaml-data) uses for local YAML data, with a couple of added features.
 
 Data is read from YAML, JSON, CSV and XML files in a `data` directory underneath the directory where your template resides. (CSV and XML support pending.)
 
