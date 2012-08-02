@@ -64,7 +64,7 @@ While all context from a data directory is available under the `data` key, the c
 Lastly, the context finder expands on Middleman's conventions through context sets. (Pending.) If you have subdirectories inside of your `/data` directory, Tilt will process those as `/data/<template>/<contextset>.json`. For a template called `homepage.dtl` and a data file that lives at `/data/homepage/alt.json`, the resulting `data` object will look like this:
   
     {
-        "index": {
+        "homepage": {
             "alt": {
                 "key": "val"
             }
