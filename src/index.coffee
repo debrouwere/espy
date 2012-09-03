@@ -19,8 +19,12 @@ getDataDir = (template, src) ->
 # find data files for a template file and return them in order (latest changed first)
 exports.findFilesFor = (template, src='data', callback) ->
     src = getDataDir template, src
+
     fs.readdir src, (errors, files) ->
+        # we soak up errors because it's perfectly normal (and not an error condition)
+        # for a template not to have any associated data files
         if errors? then files = []
+
         files = files
             .filter (file) ->
                 # TODO: a better way to get supported formats
@@ -45,7 +49,9 @@ exports.findSetsFor = (template, src='data', callback) ->
 
 exports.parse = (file, callback) ->
     doc = new tilt.File path: file
-    tilt.parse doc, null, (data, errors) ->
+    tilt.parse doc, null, (errors, data) ->
+        if errors then return callback errors
+
         if data.meta then data.meta.origin = {filename: file}
         context = {}
         context[name file] = data
@@ -55,7 +61,7 @@ getContext = exports.getContext = (files, callback) ->
     async.map files.reverse(), exports.parse, (errors, context) ->
         # merge different context objects together
         context = _.extend {}, context...
-        callback context
+        callback errors, context
 
 # find context for a template file
 exports.findFor = ->
@@ -69,7 +75,7 @@ exports.findFor = ->
 
     # find context sets
     exports.findSetsFor template, src, (files) ->
-        getContext files, (sets) ->
+        getContext files, (errors, sets) ->
             setContext = {}
             setContext[name template] = sets
             # find individual context files
