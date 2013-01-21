@@ -80,7 +80,7 @@ exports.findFor = ->
             setContext[name template] = sets
             # find individual context files
             exports.findFilesFor template, src, (files) ->
-                getContext files, (context) ->
+                getContext files, (errors, context) ->
                     mergedContext = _.extend {}, setContext, context
                     contextWithShortcuts = _.extend {data: mergedContext}, mergedContext[name template]
                     callback contextWithShortcuts
