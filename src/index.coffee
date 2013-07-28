@@ -1,9 +1,9 @@
 _ = require 'underscore'
 fs = require 'fs'
 fs.path = require 'path'
+fs.findit = require 'findit'
 async = require 'async'
 tilt = require 'tilt'
-parsers = require './parsers'
 
 name = (file) ->
     extlen = -(fs.path.extname file).length
@@ -16,26 +16,38 @@ getDataDir = (template, src) ->
         dir = template
     fs.path.join dir, src
 
-# find data files for a template file and return them in order (latest changed first)
-exports.findFilesFor = (template, src='data', callback) ->
-    src = getDataDir template, src
-
-    fs.readdir src, (errors, files) ->
+filterFiles = (src, callback) ->
+    (errors, files) ->
         # we soak up errors because it's perfectly normal (and not an error condition)
         # for a template not to have any associated data files
         if errors? then files = []
 
         files = files
             .filter (file) ->
-                # TODO: a better way to get supported formats
-                # (data-centric ones like json, yaml and txt + compilers flagged as 
-                # markup languages in the handlers?)
-                # SEE parsers.coffee
-                (fs.path.extname file) in ['.yaml', '.yml', '.json', '.txt', '.md']
+                hidden = (file.indexOf '/.') isnt -1
+                if hidden
+                    return no
+                else
+                    return tilt.hasHandler new tilt.File path: file
             .map (file) ->
-                fs.path.join src, file
+                fs.path.resolve src, file
 
         callback files
+
+# find data files for a template file and return them in order (latest changed first)
+# TODO: 
+exports.findFilesFor = (template, src='data', recursive..., callback) ->
+    src = getDataDir template, src
+    recursive = if recursive?[0] is yes then yes else no
+    filter = filterFiles src, callback
+
+    if recursive
+        finder = fs.findit.find src
+        files = []
+        finder.on 'file', (file, stat) -> files.push file
+        finder.on 'end', -> filter null, files
+    else
+        fs.readdir src, filter
 
 # find context sets for a data file and return them in a hash
 exports.findSetsFor = (template, src='data', callback) ->
@@ -48,12 +60,14 @@ exports.findSetsFor = (template, src='data', callback) ->
             callback []
 
 exports.parse = (file, callback) ->
-    doc = new tilt.File path: file
-    tilt.parse doc, null, (errors, data) ->
+    tilt.parse file, null, (errors, data) ->
         if errors then return callback errors
-
         if data.meta then data.meta.origin = {filename: file}
         context = {}
+        # TODO: regardless of whether findFilesFor is/has been recursive, 
+        # `name file` should make a name relative to the base dir, never 
+        # just take the filename sans extension (which is unfortunately
+        # what it does now).
         context[name file] = data
         callback null, context
 
@@ -68,7 +82,7 @@ exports.findFor = ->
     if arguments.length is 3
         [template, src, callback] = arguments
     else if arguments.length is 2
-        src = 'data'
+        src = 'fixtures'
         [template, callback] = arguments
     else
         throw new Error "Wrong arguments for Registry#findFor."
