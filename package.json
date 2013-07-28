@@ -2,7 +2,7 @@
     "name": "espy",
     "author": "Stijn Debrouwere",
     "description": "A context finder for static site generators and prototyping tools.",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "main": "./lib/index.js",
     "dependencies": {
         "coffee-script": "1.x", 
