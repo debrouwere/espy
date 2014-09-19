@@ -1,7 +1,5 @@
 # Espy
 
-[![Build Status](https://secure.travis-ci.org/stdbrouw/espy.png)](http://travis-ci.org/stdbrouw/espy)
-
 Espy is a context finder for templates. Context finders pass values to your templates not from a database like most web applications would, but by searching for JSON and other data files in predefined locations.
 
 Context finding is useful for two particular use-cases: 
@@ -11,7 +9,21 @@ Context finding is useful for two particular use-cases:
 
 For example, the [Jekyll](https://github.com/mojombo/jekyll) blog engine will automatically make all your blog posts and other metadata available to your blog its templates under `page`, `post` and `content`. And [Middleman](http://middlemanapp.com), a static site generator, looks for YAML data in a `/data` subdirectory and passes that on to templates.
 
-Espy helps you implement similar functionality in your own applications. Here's an example, using [Tilt.js](https://github.com/stdbrouw/tilt.js) to render the templates: 
+Espy helps you implement similar functionality in your own applications.
+
+## Status
+
+Espy is **no longer actively maintained**.
+
+For generating templates using context data, try out the [Render](https://github.com/stdbrouw/render) command-line utility instead. Together with the [Serve](https://github.com/stdbrouw/serve) live reloading server it makes for a great prototyping environment.
+
+If you're interested in a tool that can help you parse YAML multidocs (combinations of YAML frontmatter and Markdown content), check out my take on what a proper multidoc parser looks like: [yaml2json](https://github.com/stdbrouw/yaml2json). Together with [Render](https://github.com/stdbrouw/render), you've got yourself a full-blown static site generator.
+
+Another option for quick prototyping using context data is [Middleman](http://middlemanapp.com/guides/local-yaml-data), which was an inspiration in creating Espy.
+
+## Example
+
+Here's an example, using [Tilt.js](https://github.com/stdbrouw/tilt.js) to render the templates: 
 
     /* data/homepage.json */
     {
